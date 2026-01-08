@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search for the Truth - Multilingual AI</title>
+    <style>
+        :root { --primary: #0b2416; --gold: #d4af37; --text: #f0f0f0; }
+        body { margin: 0; background: var(--primary); color: var(--text); font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .header { padding: 50px 20px; text-align: center; border-bottom: 3px solid var(--gold); background: linear-gradient(to bottom, #123321, #0b2416); }
+        .logo { font-size: 32px; font-weight: 900; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+        .container { max-width: 800px; margin: -40px auto 50px; padding: 20px; }
+        .chat-card { background: #162e24; border-radius: 25px; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); border: 1px solid #244d3a; }
+        .input-group { display: flex; background: #0b1a13; border: 2px solid var(--gold); border-radius: 50px; padding: 8px 10px 8px 25px; margin-top: 20px; }
+        input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 18px; }
+        button { background: var(--gold); color: #0b2416; border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: white; transform: scale(1.05); }
+        #responseArea { margin-top: 30px; display: none; border-top: 1px solid #244d3a; padding-top: 20px; }
+        .simple-ans { font-size: 20px; color: #fff; margin-bottom: 20px; line-height: 1.5; border-left: 5px solid var(--gold); padding-left: 15px; }
+        .reference-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; font-size: 15px; }
+        .ref-tag { color: var(--gold); font-weight: bold; font-size: 13px; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">SEARCH FOR THE TRUTH</div>
+    <p>Get accurate answers from Quran & Sahih Hadees in any language</p>
+</div>
+
+<div class="container">
+    <div class="chat-card">
+        <div class="input-group">
+            <input type="text" id="userQ" placeholder="Write in Urdu, Hindi, English, etc...">
+            <button onclick="askTruth()">SEARCH</button>
+        </div>
+
+        <div id="responseArea">
+            <div class="ref-tag">Simple Answer</div>
+            <div id="simpleText" class="simple-ans"></div>
+            
+            <div class="reference-box">
+                <div class="ref-tag">Authentic References</div>
+                <div id="refText" style="margin-top:10px; color: #bbb;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function askTruth() {
+        const q = document.getElementById('userQ').value;
+        if(!q) return;
+
+        const area = document.getElementById('responseArea');
+        const sText = document.getElementById('simpleText');
+        const rText = document.getElementById('refText');
+
+        area.style.display = 'block';
+        sText.innerText = "Analyzing your question...";
+        rText.innerText = "Verifying with Quran, Bukhari, and Muslim databases...";
+
+        // Real AI Connection Note:
+        // Yahan hum Gemini AI use karenge jo har language samajhta hai.
+        setTimeout(() => {
+            sText.innerHTML = "JazakAllah! Ye website abhi taiyar ho rahi hai. Jald hi ye aapke sawal ka jawab usi zaban mein degi jisme aapne pucha hai.";
+            rText.innerHTML = "<b>Ref 1:</b> Al-Quran (Surah An-Nahl: 43)<br><b>Ref 2:</b> Sahih Bukhari (Hadees No. 1)<br><b>Ref 3:</b> Sahih Muslim (Kitaab-ul-Iman)";
+        }, 2000);
+    }
+</script>
+
+</body>
+</html>
