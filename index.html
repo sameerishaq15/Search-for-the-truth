@@ -3,69 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search for the Truth - Multilingual AI</title>
+    <title>Search for the Truth - AI Guidance</title>
     <style>
         :root { --primary: #0b2416; --gold: #d4af37; --text: #f0f0f0; }
-        body { margin: 0; background: var(--primary); color: var(--text); font-family: 'Segoe UI', Tahoma, sans-serif; }
-        .header { padding: 50px 20px; text-align: center; border-bottom: 3px solid var(--gold); background: linear-gradient(to bottom, #123321, #0b2416); }
-        .logo { font-size: 32px; font-weight: 900; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
-        .container { max-width: 800px; margin: -40px auto 50px; padding: 20px; }
-        .chat-card { background: #162e24; border-radius: 25px; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); border: 1px solid #244d3a; }
-        .input-group { display: flex; background: #0b1a13; border: 2px solid var(--gold); border-radius: 50px; padding: 8px 10px 8px 25px; margin-top: 20px; }
-        input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 18px; }
-        button { background: var(--gold); color: #0b2416; border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: white; transform: scale(1.05); }
-        #responseArea { margin-top: 30px; display: none; border-top: 1px solid #244d3a; padding-top: 20px; }
-        .simple-ans { font-size: 20px; color: #fff; margin-bottom: 20px; line-height: 1.5; border-left: 5px solid var(--gold); padding-left: 15px; }
-        .reference-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; font-size: 15px; }
-        .ref-tag { color: var(--gold); font-weight: bold; font-size: 13px; text-transform: uppercase; }
+        body { margin: 0; background: var(--primary); color: var(--text); font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; }
+        .header { padding: 30px 20px; text-align: center; border-bottom: 3px solid var(--gold); background: #123321; }
+        .logo { font-size: 26px; font-weight: 900; color: var(--gold); letter-spacing: 2px; }
+        .container { max-width: 700px; margin: 20px auto; padding: 20px; flex: 1; }
+        .chat-card { background: #162e24; border-radius: 20px; padding: 25px; border: 1px solid #244d3a; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+        .input-group { display: flex; background: #0b1a13; border: 2px solid var(--gold); border-radius: 50px; padding: 5px 5px 5px 20px; margin-bottom: 20px; }
+        input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 16px; padding: 10px 0; }
+        button { background: var(--gold); color: #0b2416; border: none; padding: 10px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #fff; transform: scale(1.05); }
+        #responseArea { display: none; border-top: 1px solid #244d3a; padding-top: 20px; animation: fadeIn 0.5s; }
+        .ans-box { background: #1d4d38; padding: 20px; border-radius: 15px; border-left: 5px solid var(--gold); line-height: 1.8; white-space: pre-wrap; color: #e0e0e0; }
+        .loader { text-align: center; color: var(--gold); display: none; margin: 20px; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="header">
     <div class="logo">SEARCH FOR THE TRUTH</div>
-    <p>Get accurate answers from Quran & Sahih Hadees in any language</p>
+    <p style="font-size: 13px; color: #888; margin-top: 5px;">Authentic Guidance from Quran, Bukhari & Muslim</p>
 </div>
 
 <div class="container">
     <div class="chat-card">
         <div class="input-group">
-            <input type="text" id="userQ" placeholder="Write in Urdu, Hindi, English, etc...">
-            <button onclick="askTruth()">SEARCH</button>
+            <input type="text" id="userQ" placeholder="Poochhein (e.g. Namaz ka tariqa)...">
+            <button onclick="askAI()">SEARCH</button>
         </div>
 
+        <div id="loader" class="loader">🔍 Analyzing Quran & Hadees...</div>
+
         <div id="responseArea">
-            <div class="ref-tag">Simple Answer</div>
-            <div id="simpleText" class="simple-ans"></div>
-            
-            <div class="reference-box">
-                <div class="ref-tag">Authentic References</div>
-                <div id="refText" style="margin-top:10px; color: #bbb;"></div>
-            </div>
+            <div class="ans-box" id="aiText"></div>
         </div>
     </div>
 </div>
 
 <script>
-    async function askTruth() {
+    async function askAI() {
+        // YAHAN APNI KEY PASTE KAREIN
+        const API_KEY = "AIzaSyAeFW5agl2afE_r_2nevv3tsWGWVCrR0nk"; 
+        
         const q = document.getElementById('userQ').value;
+        const loader = document.getElementById('loader');
+        const area = document.getElementById('responseArea');
+        const aiText = document.getElementById('aiText');
+
         if(!q) return;
 
-        const area = document.getElementById('responseArea');
-        const sText = document.getElementById('simpleText');
-        const rText = document.getElementById('refText');
+        loader.style.display = 'block';
+        area.style.display = 'none';
 
-        area.style.display = 'block';
-        sText.innerText = "Analyzing your question...";
-        rText.innerText = "Verifying with Quran, Bukhari, and Muslim databases...";
+        const prompt = `You are an expert Islamic Scholar. Answer the following question in the same language it was asked (Urdu/Hindi/English).
+        Guidelines:
+        1. Give a 'Simple Answer' first.
+        2. Then provide 'Detailed References' strictly from The Holy Quran, Sahih Bukhari, and Sahih Muslim only. 
+        3. Mention Verse/Hadees numbers clearly.
+        Question: ${q}`;
 
-        // Real AI Connection Note:
-        // Yahan hum Gemini AI use karenge jo har language samajhta hai.
-        setTimeout(() => {
-            sText.innerHTML = "JazakAllah! Ye website abhi taiyar ho rahi hai. Jald hi ye aapke sawal ka jawab usi zaban mein degi jisme aapne pucha hai.";
-            rText.innerHTML = "<b>Ref 1:</b> Al-Quran (Surah An-Nahl: 43)<br><b>Ref 2:</b> Sahih Bukhari (Hadees No. 1)<br><b>Ref 3:</b> Sahih Muslim (Kitaab-ul-Iman)";
-        }, 2000);
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+
+            const data = await response.json();
+            const result = data.candidates[0].content.parts[0].text;
+            
+            aiText.innerText = result;
+            loader.style.display = 'none';
+            area.style.display = 'block';
+        } catch (error) {
+            aiText.innerText = "Maafi chahte hain, kuch technical masla hai. Apni API Key check karein.";
+            loader.style.display = 'none';
+            area.style.display = 'block';
+        }
     }
 </script>
 
